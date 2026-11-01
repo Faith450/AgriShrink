@@ -1,0 +1,91 @@
+
+@import "tailwindcss";
+
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+
+
+html, body, div, p, span, h1, h2, h3, h4, th, td, label, svg {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: default !important;
+}
+
+input, textarea {
+    -webkit-user-select: text !important;
+    -ms-user-select: text !important;
+    user-select: text !important;
+    cursor: text !important;
+}
+
+button, a, select {
+    cursor: pointer !important;
+}
+
+
+.sun-icon { display: none; }
+.moon-icon { display: block; }
+
+html.dark .sun-icon { display: block; }
+html.dark .moon-icon { display: none; }
+
+
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: block !important;
+    opacity: 1 !important;
+    cursor: pointer !important;
+    filter: invert(0.2);
+}
+
+html.dark input[type="time"]::-webkit-calendar-picker-indicator,
+html.dark input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8);
+}
+
+
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.5); 
+  border-radius: 9999px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.8); 
+}
+
+
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+}
+
+
+@keyframes fadeSlide {
+    0% {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-slide {
+    animation: fadeSlide 0.5s ease-out forwards;
+  }
+
+
+
+

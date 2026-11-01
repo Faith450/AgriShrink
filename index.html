@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriShrink — FFB Logistics & Transit Loss Tracker</title>
+    <link rel="stylesheet" href="src/output.css">
+</head>
+<body class="bg-[#f0f4f1] dark:bg-[#0e1210] text-[#1a241f] dark:text-[#e2e8e4] min-h-screen font-sans antialiased selection:bg-emerald-600 selection:text-white cursor-default transition-colors duration-200">
+
+    
+    <header class="sticky top-0 z-30 bg-[#e2e9e4]/90 dark:bg-[#121815]/90 backdrop-blur-md border-b border-[#c2d0c6] dark:border-[#212d26] px-3 sm:px-6 py-3.5 shadow-sm transition-colors duration-200">
+        <div class="max-w-7xl mx-auto flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+            
+            <div class="flex items-center justify-between w-full xl:w-auto">
+                <div class="flex items-center min-w-0">
+                    <h1 class="text-base sm:text-xl font-bold tracking-tight text-[#111a15] dark:text-white truncate whitespace-nowrap">AgriShrink</h1>
+                </div>
+                
+                <nav class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                    <button id="theme-toggle-btn" class="p-2 text-[#465a50] hover:text-[#111a15] dark:text-[#8ea398] dark:hover:text-white bg-[#d3ded6] dark:bg-[#1a241f] border border-[#c2d0c6] dark:border-[#2c3d34] rounded-lg transition-all flex-shrink-0" title="Toggle Light/Dark Mode" type="button">
+                        <svg class="w-4 h-4 sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <svg class="w-4 h-4 moon-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+
+                    <a href="analytics.html" class="px-2.5 sm:px-3.5 py-1.5 text-[11px] sm:text-xs font-semibold text-[#32433a] dark:text-[#b8c5be] hover:text-[#111a15] dark:hover:text-white bg-[#d3ded6] dark:bg-[#1a241f] hover:bg-[#c5d3c9] dark:hover:bg-[#23312a] border border-[#c2d0c6] dark:border-[#2c3d34] rounded-md transition-all shadow-sm whitespace-nowrap flex-shrink-0">
+                        Analytics Dashboard
+                    </a>
+                </nav>
+            </div>
+
+            
+            <div class="flex items-center gap-2 w-full xl:w-auto">
+                <div class="relative w-full sm:w-60 xl:w-72 min-w-0">
+                    <input 
+                        id="agri-search" 
+                        type="search" 
+                        placeholder="Search crop or batch..." 
+                        class="w-full bg-white dark:bg-[#0a0e0c] border border-[#c2d0c6] dark:border-[#212d26] rounded-lg px-3 py-1.5 sm:py-2 text-xs text-[#1a241f] dark:text-[#e2e8e4] placeholder-[#6b8277] dark:placeholder-[#647a6f] focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all truncate"
+                    >
+                </div>
+                <div class="relative w-32 sm:w-44 flex-shrink-0">
+                    <input 
+                        id="unit-price" 
+                        type="number" 
+                        step="0.01" 
+                        placeholder="Unit Price (₦/MT)" 
+                        class="w-full bg-white dark:bg-[#0a0e0c] border border-[#c2d0c6] dark:border-[#212d26] rounded-lg px-3 py-1.5 sm:py-2 text-xs text-[#1a241f] dark:text-[#e2e8e4] placeholder-[#6b8277] dark:placeholder-[#647a6f] focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all"
+                    >
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+   
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 py-8 space-y-8">
+
+    
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-5 summary-cards">
+            
+            <div class="theme-card bg-[#e2e9e4] dark:bg-[#141c18] border border-[#c2d0c6] dark:border-[#212d26] rounded-xl p-5 hover:border-[#a3b8ab] dark:hover:border-[#2f4237] transition-all shadow-sm">
+                <p class="text-xs font-medium text-[#465a50] dark:text-[#8ea398] uppercase tracking-wider mb-2">Gross Tonnage Processed</p>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-2xl font-bold text-[#111a15] dark:text-white tracking-tight" id="total-tonnage">0.00 MT</span>
+                </div>
+            </div>
+
+            <div class="bg-[#e2e9e4] dark:bg-[#141c18] border border-[#c2d0c6] dark:border-[#212d26] rounded-xl p-5 hover:border-[#a3b8ab] dark:hover:border-[#2f4237] transition-all shadow-sm">
+                <p class="text-xs font-medium text-[#465a50] dark:text-[#8ea398] uppercase tracking-wider mb-2">Average Shrinkage Rate</p>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-2xl font-bold text-amber-600 dark:text-amber-400 tracking-tight" id="average-shrinkage">0.00%</span>
+                </div>
+            </div>
+
+            <div class="bg-[#e2e9e4] dark:bg-[#141c18] border border-[#c2d0c6] dark:border-[#212d26] rounded-xl p-5 hover:border-[#a3b8ab] dark:hover:border-[#2f4237] transition-all shadow-sm">
+                <p class="text-xs font-medium text-[#465a50] dark:text-[#8ea398] uppercase tracking-wider mb-2">Total Financial Loss</p>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-2xl font-bold text-orange-600 dark:text-orange-400 tracking-tight" id="total-financial-loss">₦0.00</span>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+          
+            <div class="lg:col-span-5 bg-[#e2e9e4] dark:bg-[#141c18] border border-[#c2d0c6] dark:border-[#212d26] rounded-xl p-6 shadow-sm">
+                <div class="mb-5 pb-4 border-b border-[#c2d0c6] dark:border-[#212d26]">
+                    <h2 class="text-base font-semibold text-[#111a15] dark:text-white">Log Batch Transit</h2>
+                    <p class="text-xs text-[#465a50] dark:text-[#8ea398] mt-0.5">Enter scale readings and transit timestamps</p>
+                </div>
+
+                <form class="space-y-4">
+                    
+                    <div class="space-y-1.5"> 
+                        <label for="batch-id" class="text-xs font-medium text-[#25332b] dark:text-[#b8c5be]">Batch / Truck ID</label>
+                        <input id="batch-id" type="text" placeholder="e.g. TRK-8802" class="theme-input w-full bg-white dark:bg-[#0a0e0c] border border-[#c2d0c6] dark:border-[#212d26] rounded-lg p-2.5 text-xs text-[#1a241f] dark:text-[#e2e8e4] placeholder-[#6b8277] dark:placeholder-[#647a6f] focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all">
+                    </div>
+
+                    <div class="space-y-1.5"> 
+                        <label for="supplier-source" class="text-xs font-medium text-[#25332b] dark:text-[#b8c5be]">Farm Name</label>
+                        <input id="supplier-source" type="text" placeholder="e.g. Delta Palm Estate" class="w-full bg-white dark:bg-[#0a0e0c] border border-[#c2d0c6] dark:border-[#212d26] rounded-lg p-2.5 text-xs text-[#1a241f] dark:text-[#e2e8e4] placeholder-[#6b8277] dark:placeholder-[#647a6f] focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all">
+                    </div>
+
+                    <div class="space-y-1.5"> 
+                        <label for="batch-date" class="text-xs font-medium text-[#25332b] dark:text-[#b8c5be]">Transit Date</label>
+                        <input id="batch-date" type="date" class="w-full bg-white dark:bg-[#0a0e0c] border border-[#c2d0c6] dark:border-[#212d26] rounded-lg p-2.5 text-xs text-[#1a241f] dark:text-[#e2e8e4] focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all">
+                    </div>
+
+                    <div class="space-y-1.5 pt-1">
+                        <span class="text-xs font-semibold text-[#465a50] dark:text-[#8ea398] uppercase tracking-wider">Transit Parameters</span>
+                        <div class="grid grid-cols-2 gap-3 pt-1">
+                            <div class="space-y-1">
+                                <label for="departure-time" class="text-[11px] text-[#465a50] dark:text-[#8ea398]">Departure Time</label>
+                                <input id="departure-time" type="time" class="w-full bg-white dark:bg-[#0a0e0c] border border-[#c2d0c6] dark:border-[#212d26] rounded-lg p-2 pr-8 text-xs text-[#1a241f] dark:text-[#e2e8e4] focus:outline-none focus:border-emerald-500 transition-all">
+                            </div>
+                            <div class="space-y-1">
+                                <label for="arrival-time" class="text-[11px] text-[#465a50] dark:text-[#8ea398]">Arrival Time</label>
+                                <input id="arrival-time" type="time" class="w-full bg-white dark:bg-[#0a0e0c] border border-[#c2d0c6] dark:border-[#212d26] rounded-lg p-2 pr-8 text-xs text-[#1a241f] dark:text-[#e2e8e4] focus:outline-none focus:border-emerald-500 transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1.5 pt-1"> 
+                        <span class="text-xs font-semibold text-[#465a50] dark:text-[#8ea398] uppercase tracking-wider">Weight Readings (MT)</span>
+                        <div class="grid grid-cols-2 gap-3 pt-1">
+                            <div class="space-y-1">
+                                <label for="farm-weight" class="text-[11px] text-[#465a50] dark:text-[#8ea398]">Farm Weight</label>
+                                <input id="farm-weight" type="number" step="0.01" placeholder="0.00" class="w-full bg-white dark:bg-[#0a0e0c] border border-[#c2d0c6] dark:border-[#212d26] rounded-lg p-2 text-xs text-[#1a241f] dark:text-[#e2e8e4] focus:outline-none focus:border-emerald-500 transition-all">
+                            </div>
+                            <div class="space-y-1">
+                                <label for="mill-weight" class="text-[11px] text-[#465a50] dark:text-[#8ea398]">Mill Weight</label>
+                                <input id="mill-weight" type="number" step="0.01" placeholder="0.00" class="w-full bg-white dark:bg-[#0a0e0c] border border-[#d2dfd8] dark:border-[#212d26] rounded-lg p-2 text-xs text-[#1a241f] dark:text-[#e2e8e4] focus:outline-none focus:border-emerald-500 transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full mt-2 bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-lg text-xs font-semibold transition-all flex items-center justify-center gap-2 shadow-md">
+                        <span>Log Batch Entry</span>
+                        <svg class="w-4 h-4 animate-spin hidden" id="submit-loader" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                        </svg>
+                    </button>
+
+                </form>
+            </div>
+
+           
+            <div class="lg:col-span-7 bg-[#e2e9e4] dark:bg-[#141c18] border border-[#c2d0c6] dark:border-[#212d26] rounded-xl p-6 shadow-sm flex flex-col min-h-[460px]">
+                <div class="mb-4 pb-3 border-b border-[#c2d0c6] dark:border-[#212d26] flex items-center justify-between">
+                    <div>
+                        <h2 class="text-base font-semibold text-[#111a15] dark:text-white">Transit Audit History</h2>
+                        <p class="text-xs text-[#465a50] dark:text-[#8ea398] mt-0.5">Log of verified scale weights</p>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto custom-scroll flex-1">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-[#c2d0c6] dark:border-[#212d26] text-[11px] font-semibold text-[#465a50] dark:text-[#8ea398] uppercase tracking-wider">
+                                <th class="pb-3 px-2 whitespace-nowrap">Batch ID</th>
+                                <th class="pb-3 px-2 whitespace-nowrap">Farm</th>
+                                <th class="pb-3 px-2 whitespace-nowrap">Date / Transit</th>
+                                <th class="pb-3 px-2 text-right whitespace-nowrap">Farm Wt</th>
+                                <th class="pb-3 px-2 text-right whitespace-nowrap">Mill Wt</th>
+                                <th class="pb-3 px-2 text-right whitespace-nowrap">Loss %</th>
+                                <th class="pb-3 px-2 whitespace-nowrap"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-body divide-y divide-[#c2d0c6] dark:divide-[#212d26]/60 text-xs text-[#1a241f] dark:text-[#c5d3cc]">
+                        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+      
+        <section class="bg-[#e2e9e4] dark:bg-[#141c18] border border-[#c2d0c6] dark:border-[#212d26] rounded-xl p-6 shadow-sm">
+            <div class="mb-5 pb-3 border-b border-[#c2d0c6] dark:border-[#212d26]">
+                <h2 class="text-base font-semibold text-[#111a15] dark:text-white">Transit Monitor</h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-4 rounded-lg bg-white dark:bg-[#0a0e0c] border border-[#c2d0c6] dark:border-[#212d26] flex flex-col justify-center items-center text-center shadow-inner">
+                    <p class="text-xs font-medium text-[#465a50] dark:text-[#8ea398] mb-1">Latest Transit Duration</p>
+                    <span class="text-xl font-bold text-[#111a15] dark:text-white" id="transit-duration">0h 0m</span>
+                </div>
+
+                <div class="p-4 rounded-lg bg-white dark:bg-[#0a0e0c] border border-[#c2d0c6] dark:border-[#212d26] flex flex-col justify-center items-center text-center shadow-inner">
+                    <p class="text-xs font-medium text-[#465a50] dark:text-[#8ea398] mb-1">Average Transit Time Today</p>
+                    <span class="text-xl font-bold text-[#111a15] dark:text-white" id="average-transit-time">0h 0m</span>
+                </div>
+
+                <div class="p-4 rounded-lg bg-white dark:bg-[#0a0e0c] border border-[#c2d0c6] dark:border-[#212d26] flex flex-col justify-center items-center text-center shadow-inner">
+                    <p class="text-xs font-medium text-[#465a50] dark:text-[#8ea398] mb-1">Transit Delay Status</p>
+                    <div class="mt-1 flex items-center justify-center gap-2">
+                        <span id="warning-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 dark:border-emerald-800/40">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse"></span>
+                            On Schedule
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="argi.js"></script>
+</body>
+</html>
